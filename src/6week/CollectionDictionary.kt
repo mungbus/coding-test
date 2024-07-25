@@ -1,14 +1,12 @@
 package `6week`
 
-import java.util.LinkedList
-
 class CollectionDictionary(private val find: String) {
     private val dic = arrayOf('A', 'E', 'I', 'O', 'U')
-    private val wordList = LinkedList<String>()
+    private var index: Int = -1
 
     fun find(word: String = ""): Int? {
-        wordList.add(word)
-        return if (word == find) wordList.size - 1
+        index++
+        return if (word == find) index
         else if (word.length >= 5) null
         else dic.firstNotNullOfOrNull {
             find(word + it)
