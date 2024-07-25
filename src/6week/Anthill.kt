@@ -1,24 +1,21 @@
 package `6week`
 
-fun anthill(temp: List<List<String>>, depth: Int = 0) {
-    if (temp.isEmpty()) return
-    val result = temp.groupBy({
-        if (it.isNotEmpty()) it.first()
-        else return
+fun List<List<String>>.anthill(depth: Int = 0) {
+    groupBy({
+        if (it.isEmpty()) return
+        it.first()
     }, {
-        if (it.isNotEmpty()) it.drop(1)
-        else emptyList()
-    })
-    result.toSortedMap().forEach {
-        println(Array(depth) { "--" }.joinToString("") + it.key)
-        it.key to anthill(it.value, depth + 1)
+        if (it.isEmpty()) return
+        it.drop(1)
+    }).toSortedMap().forEach {
+        println("--".repeat(depth) + it.key)
+        it.key to it.value.anthill(depth + 1)
     }
 }
 
 fun main() {
     val N = readln().toInt()
-    var temp: List<List<String>> = Array(N) {
+    Array(N) {
         readln().split(" ").drop(1)
-    }.toList()
-    anthill(temp)
+    }.toList().anthill()
 }
