@@ -32,6 +32,8 @@ fun main() {
             }
         }
     }
+//    println(nonCycleMap)
+//    println(cycleMap)
     val answer = initVideoList.map { init ->
         var cycleCnt = M - 1
         var temp = init
