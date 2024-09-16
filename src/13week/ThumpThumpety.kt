@@ -37,8 +37,8 @@ fun main() {
     val (N, M) = readln().split(" ").map { it.toInt() }
     val J = readln().toInt()
     readln()
-    val A_houses = readln().split(" ").map { it.toInt() }
-    val B_houses = readln().split(" ").map { it.toInt() }
+    val housesA = readln().split(" ").map { it.toInt() }
+    val housesB = readln().split(" ").map { it.toInt() }
 
     val graph = Array(N + 1) { mutableListOf<Edge>() }
     repeat(M) {
@@ -51,10 +51,10 @@ fun main() {
     val distFromJ = dijkstra(J, N, graph)
 
     // A형 집들 중 가장 짧은 거리
-    val minADist = A_houses.minOf { distFromJ[it] }
+    val minADist = housesA.minOf { distFromJ[it] }
 
     // B형 집들 중 가장 짧은 거리
-    val minBDist = B_houses.minOf { distFromJ[it] }
+    val minBDist = housesB.minOf { distFromJ[it] }
 
     // 결과 출력
     when {
