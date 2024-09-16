@@ -1,30 +1,24 @@
 package `13week`
 
 import java.util.PriorityQueue
+import kotlin.Int.Companion.MAX_VALUE
 
-const val INF = Int.MAX_VALUE
-
-data class Edge(val node: Int, val weight: Int)
-
-fun dijkstra(start: Int, n: Int, graph: Array<MutableList<Edge>>): IntArray {
-    val dist = IntArray(n + 1) { INF }
+private fun dijkstra(start: Int, n: Int, graph: Array<MutableList<Pair<Int, Int>>>): IntArray {
+    val dist = IntArray(n + 1) { MAX_VALUE }
     dist[start] = 0
-    val pq = PriorityQueue(compareBy<Pair<Int, Int>> { it.first }) // (거리, 노드)
-    pq.add(0 to start)
+    val pq = PriorityQueue(compareBy<Pair<Int, Int>> { it.second })
+    pq.add(start to 0)
 
+    // (노드, 거리) 계산
     while (pq.isNotEmpty()) {
-        val (currentDist, currentNode) = pq.poll()
-
+        val (currentNode, currentDist) = pq.poll()
         if (currentDist > dist[currentNode]) continue
-
         for (edge in graph[currentNode]) {
-            val nextNode = edge.node
-            val weight = edge.weight
+            val (nextNode, weight) = edge
             val distance = currentDist + weight
-
             if (distance < dist[nextNode]) {
                 dist[nextNode] = distance
-                pq.add(distance to nextNode)
+                pq.add(nextNode to distance)
             }
         }
     }
@@ -33,21 +27,20 @@ fun dijkstra(start: Int, n: Int, graph: Array<MutableList<Edge>>): IntArray {
 }
 
 fun main() {
-    // 입력 받기
     val (N, M) = readln().split(" ").map { it.toInt() }
     val J = readln().toInt()
     readln()
     val housesA = readln().split(" ").map { it.toInt() }
     val housesB = readln().split(" ").map { it.toInt() }
 
-    val graph = Array(N + 1) { mutableListOf<Edge>() }
+    val graph = Array(N + 1) { mutableListOf<Pair<Int, Int>>() }
     repeat(M) {
         val (X, Y, Z) = readln().split(" ").map { it.toInt() }
-        graph[X].add(Edge(Y, Z))
-        graph[Y].add(Edge(X, Z))
+        graph[X].add(Pair(Y, Z))
+        graph[Y].add(Pair(X, Z))
     }
 
-    // 진서의 집에서 각 집까지의 최단 거리 계산
+    // 진서(J)의 집에서 각 집까지의 최단 거리 계산
     val distFromJ = dijkstra(J, N, graph)
 
     // A형 집들 중 가장 짧은 거리
@@ -58,7 +51,7 @@ fun main() {
 
     // 결과 출력
     when {
-        minADist == INF && minBDist == INF -> {
+        minADist == MAX_VALUE && minBDist == MAX_VALUE -> {
             println("-1")
         }
 
