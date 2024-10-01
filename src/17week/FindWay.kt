@@ -35,9 +35,6 @@ fun main() {
             }
         }
     }
-    ijList.forEach { (i, j) ->
-        adjacencyMatrix[i][j] = 1
-    }
     println(adjacencyMatrix.map {
         it.joinToString(" ")
     }.joinToString("\n"))
