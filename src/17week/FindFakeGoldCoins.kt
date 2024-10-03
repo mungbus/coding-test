@@ -2,9 +2,7 @@ package `17week`
 
 fun main() {
     val N = readln().toInt()
-    val answer = if (N == 1) {
-        1
-    } else {
+    val answer = if (N == 1) 1 else {
         val goldList = Array(N) { it + 1 }.toList()
         goldList.divThree().first()
     }
