@@ -17,7 +17,7 @@ fun main() {
         val value = readln().toInt()
         index to value
     }.toList()
-    (1..N).reversed().forEach { n ->
+    (N downTo 1).forEach { n ->
         numberList.combinations(n).forEach {
             if (it.check()) {
                 println("$n\n${it.map { it.first }.joinToString("\n")}")
