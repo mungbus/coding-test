@@ -5,8 +5,12 @@ fun main() {
     val adjacencyMatrix = Array(N) {
         Array(N) { 0 }
     }
+    val visited = Array(N) { BooleanArray(N) { false } }
 
     fun LinkedHashSet<Pair<Int, Int>>.connections(i: Int, j: Int) {
+        if (visited[i][j]) return
+        visited[i][j] = true
+
         val result = flatMap { (befI, befJ) ->
             val tempList = LinkedHashSet<Pair<Int, Int>>()
             if (befJ == i && adjacencyMatrix[befI][j] == 0) {
