@@ -22,9 +22,7 @@ fun main() {
         if (result.isNotEmpty()) {
             addAll(result)
             result.forEach { (newI, newJ) ->
-                if (newI != i && newJ != j) {
-                    connections(newI, newJ)
-                }
+                connections(newI, newJ)
             }
         }
     }
