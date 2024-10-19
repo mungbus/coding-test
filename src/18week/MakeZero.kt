@@ -1,14 +1,56 @@
 package `18week`
 
-val operation = listOf("+", "-", "")
+private val operators = listOf("+", "-", " ")
+fun List<Int>.generateOperateCombinations(): List<String> {
+    fun apply(index: Int, current: String): List<String> {
+        if (index == size) return listOf(current)
+
+        val combinations = mutableListOf<String>()
+        for (operator in operators) {
+            combinations.addAll(apply(index + 1, current + operator + this[index]))
+        }
+        return combinations
+    }
+    return apply(1, this[0].toString())
+}
+
+fun calculate(expression: String): Int {
+    var result = 0
+    var currentNumber = 0
+    var lastOperator = '+'
+
+    fun applyOperator(operator: Char, number: Int) {
+        when (operator) {
+            '+' -> result += number
+            '-' -> result -= number
+        }
+    }
+
+    for (char in expression) {
+        if (char.isDigit()) {
+            currentNumber = currentNumber * 10 + (char - '0')
+        } else if (char == '+' || char == '-') {
+            applyOperator(lastOperator, currentNumber)
+            currentNumber = 0
+            lastOperator = char
+        }
+    }
+    applyOperator(lastOperator, currentNumber)
+    return result
+}
+
+private val NL = "\n"
 
 fun main() {
     val N = readln().toInt()
-    repeat(N) {
-        val list = (1..readln().toInt()).toList()
-
-        // 모든 값을 +, -, "" 이렇게 넣어서 js eval로 값을 연산한 뒤 그 값이 0인 대상만 출력하는 방식
-        println()
-    }
-
+    println(Array(N) {
+        val intList = (1..readln().toInt()).toList()
+        val scripts = intList.generateOperateCombinations()
+        scripts.mapNotNull { script ->
+            val result: Boolean = calculate(script) == 0
+            if (result) {
+                script
+            } else null
+        }.sorted().joinToString(NL)
+    }.joinToString("$NL$NL"))
 }
