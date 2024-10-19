@@ -1,10 +1,39 @@
 package `18week`
 
-fun main() {
-    val (N, K) = readln().split(" ").map { it.toInt() }
-    val table = readln().split("")
+fun maxHamburgers(table: String, k: Int): Int {
+    val people = mutableListOf<Int>()
+    val hamburgers = mutableListOf<Int>()
+    for (i in table.indices) {
+        if (table[i] == 'P') {
+            people.add(i)
+        } else if (table[i] == 'H') {
+            hamburgers.add(i)
+        }
+    }
 
-    // 모든 경우에 대한 햄버거 가능 여부 체크 -> DFS로 최대 체크 필요
-    // 사람과 햄버거를 두고 각 사람이 가능한 버거를 번호로 둔다
-    // 현재 버거중에 제거해 가면서 조건을 테스트
+    var pIndex = 0
+    var hIndex = 0
+    var count = 0
+
+    while (pIndex < people.size && hIndex < hamburgers.size) {
+        if (Math.abs(people[pIndex] - hamburgers[hIndex]) <= k) {
+            count++
+            pIndex++
+            hIndex++
+        } else {
+            if (people[pIndex] < hamburgers[hIndex]) {
+                pIndex++
+            } else {
+                hIndex++
+            }
+        }
+    }
+
+    return count
+}
+
+fun main() {
+    val (_, K) = readln().split(" ").map { it.toInt() }
+    val table = readln()
+    println(maxHamburgers(table, K))
 }
