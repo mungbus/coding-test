@@ -32,10 +32,10 @@ fun main() {
     }
 
     val removePart = afterMaxList.filter { it.first > afterMaxIndex }
-    val removeMap = removePart.associate { it.first to it.second }
     var remove = 0
-    currentH = 0
     if (removePart.isNotEmpty()) {
+        currentH = 0
+        val removeMap = removePart.associate { it.first to it.second }
         for (i in removePart.last().first downTo afterMaxIndex + 1) {
             val getH = removeMap.get(i)
             currentH = getH?.let {
