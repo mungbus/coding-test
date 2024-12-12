@@ -1,4 +1,4 @@
-package `19week`
+package `18week`
 
 private const val mod = 1_000_000
 

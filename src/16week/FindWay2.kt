@@ -1,4 +1,4 @@
-package `17week`
+package `16week`
 
 fun main() {
     val N = readln().toInt()

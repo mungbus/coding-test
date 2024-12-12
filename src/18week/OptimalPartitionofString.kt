@@ -1,4 +1,4 @@
-package `19week`
+package `18week`
 
 class Solution2 {
     fun partitionString(s: String): Int {

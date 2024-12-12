@@ -1,4 +1,4 @@
-package `17week`
+package `16week`
 
 fun Collection<Pair<Int, Int>>.check(): Boolean {
     val firstSet = mutableSetOf<Int>()

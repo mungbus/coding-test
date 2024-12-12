@@ -1,4 +1,4 @@
-package `18week`
+package `17week`
 
 fun maxHamburgers(table: String, k: Int): Int {
     val people = mutableListOf<Int>()

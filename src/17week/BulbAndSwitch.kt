@@ -1,4 +1,4 @@
-package `18week`
+package `17week`
 
 fun IntArray.toggle(idx: Int) {
     for (i in idx - 1..idx + 1) {

@@ -1,4 +1,4 @@
-package `18week`
+package `17week`
 
 private val operators = listOf("+", "-", " ")
 fun List<Int>.generateOperateCombinations(): List<String> {
