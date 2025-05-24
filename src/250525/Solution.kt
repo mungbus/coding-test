@@ -2,20 +2,26 @@ package `250525`
 
 import kotlin.math.abs
 
+/*
+입력 배열을 정렬합니다.
+양 끝에서 투 포인터로 합의 절댓값이 최소가 되는 쌍을 찾습니다.
+*/
+
 fun main() {
-	readln()
-	val solList = readln().split(" ").map { it.toInt() }
-	var min = Int.MAX_VALUE
-	var pair = Pair(-1, -1)
-	for (i in 0 until solList.size) {
-		for (j in i + 1 until solList.size) {
-			if (i == j) continue
-			val v = abs(solList[i] + solList[j])
-			if (v <= min) {
-				pair = Pair(i, j)
-				min = v
-			}
-		}
-	}
-	println(listOf(solList[pair.first], solList[pair.second]).sorted().joinToString(" "))
+    readln()
+    val solList = readln().split(" ").map { it.toInt() }.sorted()
+    var left = 0
+    var right = solList.lastIndex
+    var min = Int.MAX_VALUE
+    var answer = Pair(0, 0)
+
+    while (left < right) {
+        val sum = solList[left] + solList[right]
+        if (abs(sum) < min) {
+            min = abs(sum)
+            answer = Pair(solList[left], solList[right])
+        }
+        if (sum < 0) left++ else right--
+    }
+    println(listOf(answer.first, answer.second).sorted().joinToString(" "))
 }
