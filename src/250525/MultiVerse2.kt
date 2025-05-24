@@ -1,5 +1,10 @@
 package `250525`
 
+/*
+각 우주별로 크기를 랭킹(동일값은 같은 랭크)으로 변환
+랭킹 배열을 문자열(혹은 튜플)로 변환해 해시맵에 카운트
+같은 랭킹 배열을 가진 우주 쌍의 수를 조합(pairCount)으로 합산
+ */
 fun getRanks(space: List<Int>): List<Int> {
     val sorted = space.withIndex().sortedBy { it.value }
     val ranks = IntArray(space.size)
