@@ -1,41 +1,52 @@
 package `250808`
 
+data class Point(val row: Int, val col: Int)
+
 class JumpGame(
-    val N: Int,
-    val k: Int,
-    val map: List<List<Boolean>>,
-    private val pos: Pair<Int, Int> = Pair(0, 0),
-    val rm: Int = -1
+    private val N: Int,
+    private val k: Int,
+    private val map: List<List<Boolean>>,
+    private val visited: MutableSet<Point> = mutableSetOf()
 ) {
-    fun go(): Pair<Int, Int> {
-        val newPos = Pair(pos.first, pos.second + 1)
-        if (newPos.second >= map[0].size || !map[newPos.first][newPos.second]) {
-            throw IllegalArgumentException("Cannot move forward from position $pos")
-        }
-        return newPos
+    fun solve(pos: Point = Point(0, 0)): Boolean {
+        if (pos.col >= N - 1) return true
+        if (!visited.add(pos)) return false
+
+        return listOfNotNull(
+            tryMove { go(pos) },
+            tryMove { down(pos) },
+            tryMove { jump(pos) }
+        ).any { next -> solve(next) }
     }
 
-    fun down(): Pair<Int, Int> {
-        val newPos = Pair(pos.first, pos.second - 1)
-        if (newPos.second <= rm || !map[newPos.first][newPos.second]) {
-            throw IllegalArgumentException("Cannot move backward from position $pos")
+    private fun go(pos: Point): Point? {
+        val next = Point(pos.row, pos.col + 1)
+        return next.takeIf {
+            it.col >= N || (it.col < map[0].size && map[it.row][it.col])
         }
-        return newPos
     }
 
-    fun jump(): Pair<Int, Int> {
-        val nextRow = if (pos.first == 0) 1 else 0
-        val nextCol = pos.second + k + 1
-        val nextPos = Pair(nextRow, nextCol)
-
-        if (nextCol < map[0].size && !map[nextPos.first][nextPos.second]) {
-            throw IllegalArgumentException("Cannot jump to position $nextPos")
+    private fun down(pos: Point): Point? {
+        val next = Point(pos.row, pos.col - 1)
+        return next.takeIf {
+            it.col >= 0 && map[it.row][it.col]
         }
-        return nextPos
     }
 
-    fun isFinished(): Boolean {
-        return pos.second >= N - 1
+    private fun jump(pos: Point): Point? {
+        val next = Point(
+            if (pos.row == 0) 1 else 0,
+            pos.col + k + 1
+        )
+        return next.takeIf {
+            it.col >= N || (it.col < map[0].size && map[it.row][it.col])
+        }
+    }
+
+    private inline fun tryMove(move: () -> Point?): Point? = try {
+        move()
+    } catch (e: Exception) {
+        null
     }
 }
 
@@ -46,28 +57,5 @@ fun main() {
         readln().map { it.digitToInt() == 1 }
     )
 
-    println(if (jump(JumpGame(N, k, map, rm = -1))) 1 else 0)
-}
-
-fun jump(game: JumpGame): Boolean {
-    if (game.isFinished()) return true
-    val go = try {
-        val next = game.go()
-        jump(JumpGame(game.N, game.k, game.map, next, game.rm + 1))
-    } catch (e: IllegalArgumentException) {
-        false
-    }
-    val down = try {
-        val next = game.down()
-        jump(JumpGame(game.N, game.k, game.map, next, game.rm + 1))
-    } catch (e: IllegalArgumentException) {
-        false
-    }
-    val jump = try {
-        val next = game.jump()
-        jump(JumpGame(game.N, game.k, game.map, next, game.rm + 1))
-    } catch (e: IllegalArgumentException) {
-        false
-    }
-    return go || down || jump
+    println(if (JumpGame(N, k, map).solve()) 1 else 0)
 }
