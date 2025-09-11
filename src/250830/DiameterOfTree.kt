@@ -20,7 +20,7 @@ class DiameterOfTree(val n: Int, val graph: Array<MutableList<Pair<Int, Int>>>) 
                 }
             }
         }
-        return farNode to distances[farNode]
+        return Pair(farNode, distances[farNode])
     }
 }
 
@@ -36,7 +36,6 @@ fun main() {
         graph[parent].add(child to weight)
         graph[child].add(parent to weight)
     }
-
 
     val diameterOfTree = DiameterOfTree(n, graph)
     val (farNode, _) = diameterOfTree.bfs(0)
