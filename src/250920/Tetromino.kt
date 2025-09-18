@@ -9,6 +9,16 @@ class Tetromino(val n: Int, private val m: Int, private val board: Array<IntArra
         fun isValid(): Boolean {
             return x in 0..<n && y in 0..<m
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Position) return false
+            return x == other.x && y == other.y
+        }
+
+        override fun hashCode(): Int {
+            return 31 * x + y
+        }
     }
 
     private fun List<Position>.rotate(): List<Position> {
@@ -25,8 +35,8 @@ class Tetromino(val n: Int, private val m: Int, private val board: Array<IntArra
         val transformations = mutableSetOf<List<Position>>()
         var current = shape
         repeat(4) {
-            transformations.add(current.sortedBy { it.x * 100 + it.y }) // 정렬하여 중복 방지
-            transformations.add(current.mirror().sortedBy { it.x * 100 + it.y }) // 반전 후 정렬
+            transformations.add(current)
+            transformations.add(current.mirror())
             current = current.rotate()
         }
         return transformations.toList()
