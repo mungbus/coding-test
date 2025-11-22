@@ -31,7 +31,7 @@ fun main() {
         }
 
         // 백트래킹 (DFS) 탐색
-        var minResult = Int.MAX_VALUE
+        var minResult = INF
         val visited = BooleanArray(n + 1) // 방문 여부 체크용 배열
 
         fun dfs(current: Int, count: Int, currentCost: Int) {
