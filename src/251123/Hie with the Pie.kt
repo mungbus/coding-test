@@ -49,7 +49,7 @@ fun main() {
                 if (!visited[next]) {
                     visited[next] = true // 방문 처리
 
-                    // 재귀 호출: 다음 장소로 이동
+                    // 다음 장소로 이동
                     dfs(next, count + 1, currentCost + dist[current][next])
 
                     visited[next] = false // 원상 복구 (백트래킹)
