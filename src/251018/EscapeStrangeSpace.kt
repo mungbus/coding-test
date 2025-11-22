@@ -20,7 +20,7 @@ import java.util.Queue
  */
 
 // 디버그 옵션
-private const val DEBUG_CUBE = false
+private const val DEBUG_CUBE = true
 private const val DEBUG_PLANE = false
 
 // 평면 상태 출력용 상수
