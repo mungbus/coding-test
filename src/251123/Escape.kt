@@ -47,14 +47,16 @@ fun main() {
         while (waterQueue.isNotEmpty()) {
             val (pos, time) = waterQueue.removeFirst()
 
-            for (dir in directions) {
+            directions.forEach { dir ->
                 val next = pos + dir
                 val (nr, nc) = next
 
-                if (isValid(next) && board[nr][nc] != 'X' && board[nr][nc] != 'D' && waterTime[nr][nc] == Int.MAX_VALUE) {
-                    waterTime[nr][nc] = time + 1
-                    waterQueue.add(Point(next, time + 1))
+                if (isValid(next) && setOf('X', 'D').contains(board[nr][nc]) && waterTime[nr][nc] == Int.MAX_VALUE) {
+                    val nextTime = time + 1
+                    waterTime[nr][nc] = nextTime
+                    waterQueue.add(Point(next, nextTime))
                 }
+
             }
         }
     }
@@ -68,22 +70,23 @@ fun main() {
         while (hedgehogQueue.isNotEmpty()) {
             val (pos, time) = hedgehogQueue.removeFirst()
 
-            for (dir in directions) {
+            directions.forEach { dir ->
                 val next = pos + dir
                 val (nr, nc) = next
 
                 if (isValid(next) && !visited[nr][nc]) {
 
-                    // 비버굴 도착!
+                    val nextHedgehogTime = time + 1
+                    // 비버굴 도착
                     if (board[nr][nc] == 'D') {
-                        println(time + 1)
+                        println(nextHedgehogTime)
                         return
                     }
 
                     // 물이 차는 시간 확인
-                    if (board[nr][nc] == '.' && (time + 1) < waterTime[nr][nc]) {
+                    if (board[nr][nc] == '.' && nextHedgehogTime < waterTime[nr][nc]) {
                         visited[nr][nc] = true
-                        hedgehogQueue.add(Point(next, time + 1))
+                        hedgehogQueue.add(Point(next, nextHedgehogTime))
                     }
                 }
             }
