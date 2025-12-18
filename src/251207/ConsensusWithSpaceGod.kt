@@ -60,7 +60,7 @@ fun main() {
     val uf = UnionFind(N)
 
     // 이미 연결된 간선들을 먼저 UnionFind에 등록
-    (0 until M).forEach {
+    repeat(M) {
         val (u, v) = readln().split(" ").map { it.toInt() - 1 }
         uf.union(u, v)
     }
