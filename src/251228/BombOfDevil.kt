@@ -1,5 +1,7 @@
 package `251228`
 
+import kotlin.math.abs
+
 fun main() {
     readln().toInt() // n 입력값 읽음
     val positions = readln().split(" ").map { it.toLong() }
@@ -59,7 +61,7 @@ fun canDestroyAll(bombs: List<Triple<Long, Int, Int>>, r: Long, budget: Long): B
                 val currPos = bombs[curr].first
 
                 for (j in 0 until n) {
-                    if (!visited[j] && Math.abs(bombs[j].first - currPos) <= r) {
+                    if (!visited[j] && abs(bombs[j].first - currPos) <= r) {
                         visited[j] = true
                         queue.add(j)
                         destroyed[j] = true
