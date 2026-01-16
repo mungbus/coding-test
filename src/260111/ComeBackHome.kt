@@ -4,7 +4,7 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 fun main() {
-    val (X, Y, D, T) = readln().split(" ").map { it.toInt() }
+    val (X, Y, D, T) = readln().split(" ").map { it.toLong() }
 
     val distance = sqrt(X * X + Y * Y + 0.0)
 
