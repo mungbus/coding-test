@@ -7,8 +7,8 @@ fun countBothGroups(grid: Array<CharArray>, N: Int): Pair<Int, Int> {
     var normalCount = 0
     var colorBlindCount = 0
 
-    for (i in 0..<N) {
-        for (j in 0..<N) {
+    repeat(N) { i ->
+        repeat(N) { j ->
             val color = grid[i][j]
             val (normalVisited, colorBlindVisited) = visited[i][j]
 
