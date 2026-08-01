@@ -7,9 +7,9 @@ class Solution {
         val endIndex: Int
     ) {
         // 단어 범위와 스포 방지 구간이 겹치는지 여부를 판단하는 확장 함수
-        fun overlapsWith(range: IntArray): Int {
+        fun overlapsWith(range: IntArray): Boolean {
             val (start, end) = range
-            return if (startIndex <= end && endIndex >= start) 1 else 0
+            return startIndex <= end && endIndex >= start
         }
     }
 
@@ -26,12 +26,12 @@ class Solution {
         // 2. 어떤 스포 방지 구간에도 속하지 않은 '일반 영역'에 등장한 단어들 세트
         // (단어의 문자가 스포 구간 중 어디에도 포함되지 않는 경우)
         val normalAreaWords = words.filter { word ->
-            spoiler_ranges.none { range -> word.overlapsWith(range) > 0 }
+            spoiler_ranges.none { range -> word.overlapsWith(range) }
         }.map { it.text }.toSet()
 
         // 3. 스포 방지 구간별로 포함된 단어들을 순서대로 추출
         val spoilerWordsByIndex = spoiler_ranges.map { range ->
-            words.filter { word -> word.overlapsWith(range) > 0 }.map { it.text }
+            words.filter { word -> word.overlapsWith(range) }.map { it.text }
         }
 
         // 4. 스포 방지 구간을 순서대로 열면서 중요한 단어 카운트
