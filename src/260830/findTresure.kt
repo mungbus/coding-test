@@ -1,6 +1,19 @@
 package `260830`
 
 class Solution {
+    /**
+     * [전체 동작 플로우]
+     * 1. 전처리 (Precomputation):
+     *    - TreasureFinder 인스턴스 생성 시 init 블록에서 O(w³) 구간 DP 실행.
+     *    - 모든 부분 구간 [l, r]에 대해 최악 비용(Minimax)을 최소화하는 최적 열 optimalChoice[l][r] 사전 계산.
+     *
+     * 2. 대화형 탐색 (Interactive Search):
+     *    - 전체 구간 [1, n]에서 시작하여 optimalChoice[l][r]가 가리키는 열을 excavate(col)로 굴착.
+     *    - 0  -> 보물 발견: 탐색 즉시 종료 및 해당 열 반환.
+     *    - -1 -> 보물이 왼쪽: current.toLeftOf(col)로 [left, col - 1] 서브 구간 전이.
+     *    - 1  -> 보물이 오른쪽: current.toRightOf(col)로 [col + 1, right] 서브 구간 전이.
+     *    - tailrec 꼬리 재귀를 통해 스택 오버플로우 없이 O(log w) 굴착 횟수로 확정 발굴.
+     */
     fun solution(depth: IntArray, money: Int, excavate: (Int) -> Int): Int {
         val finder = TreasureFinder(depth)
         return finder.findTreasure(excavate)
@@ -12,12 +25,12 @@ class Solution {
  */
 data class SearchRange(val left: Int, val right: Int) {
     /**
-     * 특정 열(target) 기준 좌측 서브 구간 생성
+     * 특정 열(target) 기준 좌측 서브 구간 [left, target - 1] 생성
      */
     fun toLeftOf(target: Int): SearchRange = SearchRange(left, target - 1)
 
     /**
-     * 특정 열(target) 기준 우측 서브 구간 생성
+     * 특정 열(target) 기준 우측 서브 구간 [target + 1, right] 생성
      */
     fun toRightOf(target: Int): SearchRange = SearchRange(target + 1, right)
 }
@@ -32,6 +45,7 @@ class TreasureFinder(private val depth: IntArray) {
     private val optimalChoice = Array(n + 2) { IntArray(n + 2) }
 
     init {
+        // 객체 생성 즉시 1회성 전처리 수행
         buildOptimalStrategy()
     }
 
@@ -40,7 +54,7 @@ class TreasureFinder(private val depth: IntArray) {
      * 점화식: DP(l, r) = min_{l <= k <= r} ( depth[k-1] + max(DP(l, k-1), DP(k+1, r)) )
      */
     private fun buildOptimalStrategy() {
-        // 구간 길이(len)를 1부터 전체 열 크기(n)까지 점진적으로 확장
+        // 구간 길이(len)를 1부터 전체 열 크기(n)까지 점진적으로 확장 (Bottom-Up)
         for (len in 1..n) {
             for (l in 1..(n - len + 1)) {
                 val r = l + len - 1
@@ -68,16 +82,18 @@ class TreasureFinder(private val depth: IntArray) {
     fun findTreasure(excavate: (Int) -> Int): Int {
         // tailrec을 활용해 탐색 범위를 좁혀가며 스택 오버플로우 없이 안전하게 재귀 수행
         tailrec fun search(current: SearchRange): Int {
+            // 현재 구간에 대한 최적 굴착 위치 조회 (O(1))
             val targetCol = optimalChoice[current.left][current.right]
 
             return when (excavate(targetCol)) {
-                0 -> targetCol // 보물 발견 및 굴착 완료 (종료)
-                -1 -> search(current.toLeftOf(targetCol)) // 보물이 왼쪽에 있음 -> 좌측 구간 탐색
-                1 -> search(current.toRightOf(targetCol)) // 보물이 오른쪽에 있음 -> 우측 구간 탐색
+                0 -> targetCol // 보물 발견 및 굴착 완료 (종료 조건)
+                -1 -> search(current.toLeftOf(targetCol)) // 보물이 왼쪽에 있음 -> [left, targetCol - 1] 탐색
+                1 -> search(current.toRightOf(targetCol)) // 보물이 오른쪽에 있음 -> [targetCol + 1, right] 탐색
                 else -> throw IllegalStateException("Invalid response from excavate")
             }
         }
 
+        // 1번부터 n번 열까지 전체 구간에서 탐색 시작
         return search(SearchRange(1, n))
     }
 }
